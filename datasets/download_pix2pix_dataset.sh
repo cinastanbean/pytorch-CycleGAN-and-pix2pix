@@ -14,3 +14,5 @@ wget -N $URL -O $TAR_FILE
 mkdir -p $TARGET_DIR
 tar -zxvf $TAR_FILE -C ./datasets/
 rm $TAR_FILE
+
+#http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/facades.tar.gz

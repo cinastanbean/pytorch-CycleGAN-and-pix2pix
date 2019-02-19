@@ -44,6 +44,7 @@ class AlignedDataset(BaseDataset):
         # split AB image into A and B
         w, h = AB.size
         w2 = int(w / 2)
+        # Image.crop(box=None)  box – The crop rectangle, as a (left, upper, right, lower)-tuple.
         A = AB.crop((0, 0, w2, h))
         B = AB.crop((w2, 0, w, h))
 

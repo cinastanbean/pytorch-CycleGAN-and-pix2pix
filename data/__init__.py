@@ -15,7 +15,7 @@ import torch.utils.data
 from data.base_dataset import BaseDataset
 
 
-def find_dataset_using_name(dataset_name):
+def find_dataset_using_name(dataset_name): # find_dataset_using_name(opt.dataset_mode) # --dataset_mode aligned
     """Import the module "data/[dataset_name]_dataset.py".
 
     In the file, the class called DatasetNameDataset() will

@@ -29,7 +29,7 @@ def find_model_using_name(model_name):
     be instantiated. It has to be a subclass of BaseModel,
     and it is case-insensitive.
     """
-    model_filename = "models." + model_name + "_model"
+    model_filename = "models." + model_name + "_model"  # model_name = pix2pix;   pix2pix_model.py
     modellib = importlib.import_module(model_filename)
     model = None
     target_model_name = model_name.replace('_', '') + 'model'
@@ -42,7 +42,7 @@ def find_model_using_name(model_name):
         print("In %s.py, there should be a subclass of BaseModel with class name that matches %s in lowercase." % (model_filename, target_model_name))
         exit(0)
 
-    return model
+    return model # return a Class
 
 
 def get_option_setter(model_name):
@@ -61,7 +61,7 @@ def create_model(opt):
         >>> from models import create_model
         >>> model = create_model(opt)
     """
-    model = find_model_using_name(opt.model)
+    model = find_model_using_name(opt.model) # return = class Pix2PixModel(BaseModel):
     instance = model(opt)
     print("model [%s] was created" % type(instance).__name__)
     return instance

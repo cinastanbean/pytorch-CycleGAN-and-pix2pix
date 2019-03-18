@@ -27,7 +27,9 @@ class BaseModel(ABC):
             -- self.loss_names (str list):          specify the training losses that you want to plot and save.
             -- self.model_names (str list):         specify the images that you want to display and save.
             -- self.visual_names (str list):        define networks used in our training.
-            -- self.optimizers (optimizer list):    define and initialize optimizers. You can define one optimizer for each network. If two networks are updated at the same time, you can use itertools.chain to group them. See cycle_gan_model.py for an example.
+            -- self.optimizers (optimizer list):    define and initialize optimizers. You can define one optimizer for each network.
+                                                    If two networks are updated at the same time, you can use itertools.chain to group them.
+                                                    See cycle_gan_model.py for an example.
         """
         self.opt = opt
         self.gpu_ids = opt.gpu_ids
@@ -56,7 +58,7 @@ class BaseModel(ABC):
         """
         return parser
 
-    @abstractmethod
+    @abstractmethod # 抽象方法表示基类的一个方法，没有实现，所以基类不能实例化，子类实现了该抽象方法才能被实例化。
     def set_input(self, input):
         """Unpack input data from the dataloader and perform necessary pre-processing steps.
 

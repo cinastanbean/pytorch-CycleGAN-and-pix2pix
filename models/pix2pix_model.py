@@ -93,6 +93,15 @@ class Pix2PixModel(BaseModel):
         fake_AB = torch.cat((self.real_A, self.fake_B), 1)  # we use conditional GANs; we need to feed both input and output to the discriminator
         pred_fake = self.netD(fake_AB.detach())
         self.loss_D_fake = self.criterionGAN(pred_fake, False) # pred_fake.size() = torch.Size([1, 1, 30, 30])
+        '''
+        >>> fake_AB.shape
+            torch.Size([1, 6, 256, 256])
+            NCHW，在通道上进行合并，也就是pix2pix方法建立了很强的点与点间对应信息，信息在第一层就进行了合并；
+            所以，在处理包含warping和reconstruct任务的GAN中，使用这样的Discriminator是有问题的。
+        >>> pred_fake.shape
+            torch.Size([1, 1, 30, 30])
+        '''
+
         # Real
         real_AB = torch.cat((self.real_A, self.real_B), 1)
         pred_real = self.netD(real_AB)

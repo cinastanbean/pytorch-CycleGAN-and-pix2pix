@@ -206,7 +206,7 @@ class GANLoss(nn.Module):
     that has the same size as the input.
     """
 
-    def __init__(self, gan_mode, target_real_label=1.0, target_fake_label=0.0):
+    def __init__(self, gan_mode, target_real_label=1.0, target_fake_label=0.0): #
         """ Initialize the GANLoss class.
 
         Parameters:
@@ -221,7 +221,7 @@ class GANLoss(nn.Module):
         self.register_buffer('real_label', torch.tensor(target_real_label))
         self.register_buffer('fake_label', torch.tensor(target_fake_label))
         self.gan_mode = gan_mode
-        if gan_mode == 'lsgan':
+        if gan_mode == 'lsgan': # --------using as default in pix2pix
             self.loss = nn.MSELoss()
         elif gan_mode == 'vanilla':
             self.loss = nn.BCEWithLogitsLoss()
@@ -245,7 +245,7 @@ class GANLoss(nn.Module):
             target_tensor = self.real_label
         else:
             target_tensor = self.fake_label
-        return target_tensor.expand_as(prediction)
+        return target_tensor.expand_as(prediction) # prediction.shape = torch.Size([1, 1, 30, 30])
 
     def __call__(self, prediction, target_is_real):
         """Calculate loss given Discriminator's output and grount truth labels.
@@ -331,6 +331,28 @@ class ResnetGenerator(nn.Module):
         else:
             use_bias = norm_layer == nn.InstanceNorm2d
 
+        '''
+        Generator architectures We adopt our architectures from Johnson et al. [23].
+        We use 6 blocks for 128 × 128 training images, and 9 blocks for 256 × 256 or higher-resolution training images.
+        Below, we follow the naming convention used in the Johnson et al.’s Github repository.
+        
+        Let c7s1-k denote a 7 × 7 Convolution-InstanceNorm- ReLU layer with k filters and stride 1.
+        dk denotes a 3 × 3 Convolution-InstanceNorm-ReLU layer with k filters and stride 2.
+        Reflection padding was used to reduce artifacts.
+        Rk denotes a residual block that contains two 3 × 3 con- volutional layers with the same number of filters on both layer.
+        uk denotes a 3 × 3 fractional-strided-Convolution- InstanceNorm-ReLU layer with k filters and stride 1 .
+        
+        The network with 6 blocks consists of:
+        c7s1-32,d64,d128,R128,R128,R128,
+        R128,R128,R128,u64,u32,c7s1-3
+        
+        The network with 9 blocks consists of:
+        c7s1-32,d64,d128,R128,R128,R128,
+        R128,R128,R128,R128,R128,R128,u64
+        u32,c7s1-3
+                
+        '''
+
         model = [nn.ReflectionPad2d(3),
                  nn.Conv2d(input_nc, ngf, kernel_size=7, padding=0, bias=use_bias),
                  norm_layer(ngf),
@@ -345,7 +367,6 @@ class ResnetGenerator(nn.Module):
 
         mult = 2 ** n_downsampling
         for i in range(n_blocks):       # add ResNet blocks
-
             model += [ResnetBlock(ngf * mult, padding_type=padding_type, norm_layer=norm_layer, use_dropout=use_dropout, use_bias=use_bias)]
 
         for i in range(n_downsampling):  # add upsampling layers

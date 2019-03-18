@@ -28,14 +28,14 @@ if __name__ == '__main__':
     opt = TrainOptions().parse()   # get training options
     dataset = create_dataset(opt)  # create a dataset given opt.dataset_mode and other options
     dataset_size = len(dataset)    # get the number of images in the dataset.
-    print('The number of training images = %d' % dataset_size)
+    print('The number of dataset/training images = {}/{}'.format(len(dataset.dataset), dataset_size))
 
     model = create_model(opt)      # create a model given opt.model and other options
     model.setup(opt)               # regular setup: load and print networks; create schedulers
     visualizer = Visualizer(opt)   # create a visualizer that display/save images and plots
     total_iters = 0                # the total number of training iterations
 
-    print("epoch range = {%d, %d}".format(opt.epoch_count, opt.niter + opt.niter_decay + 1))
+    print("epoch range = {} -> {}".format(opt.epoch_count, opt.niter + opt.niter_decay + 1))
     for epoch in range(opt.epoch_count, opt.niter + opt.niter_decay + 1): # 100+100+1, using at model.update_learning_rate()
         # outer loop for different epochs; we save the model by <epoch_count>, <epoch_count>+<save_latest_freq>
 
